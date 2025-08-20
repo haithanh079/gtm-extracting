@@ -1,0 +1,3 @@
+// Copyright 2019 Google LLC. All Rights Reserved.
+'use strict';var a=(typeof require==="function"?require:function(){return{}})("http");var f=(typeof require==="function"?require:function(){return{}})("process");const g=Number(f.env.PORT)||8080,h=Number(f.env.HEALTH_CHECKER_TIMEOUT_IN_MILLIS)||5E3,k=Object.freeze(["127.0.0.1","::1","localhost"]);
+function l(d,e=[]){const m={host:d.splice(0,1)[0],path:"/healthz",port:g,timeout:h},c=a.get(m,b=>{b.statusCode===200&&f.exit(0);console.warn(`Failed /healthz. Status code: ${b.statusCode}`);f.exit(1)});c.on("timeout",()=>{c.abort();console.warn("TIMEOUT");f.exit(1)});c.on("error",b=>{e.push(`ERROR: ${b}`);d.length?l(d,e):(e.forEach(n=>{console.error(n)}),f.exit(1))});c.end()}l(k.slice(0));
