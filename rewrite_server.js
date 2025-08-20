@@ -262,11 +262,12 @@ global.dirname = __dirname;
       if (errorClass) throw new errorClass(errorMessage);
       if (response.statusCode >= 500) throw new HttpServerError(errorMessage);
       if (response.statusCode >= 400) throw new HttpClientError(errorMessage);
-      let bootstrapServer = fs.readFileSync("./original_source/server_bootstrap.js");
+      // Load and execute the new modular server logic
+      let modularServer = fs.readFileSync(require.resolve("./server.js"), "utf-8");
       try {
-        vmModule.runInThisContext(bootstrapServer || "");
+        vmModule.runInThisContext(modularServer || "");
       } catch (error) {
-        console.error(`Unable to process server bootstrap JS at ${serverBootstrapUrl}\n`, error);
+        console.error(`Unable to process modular server logic from server.js\n`, error);
         throw error;
       }
     })
